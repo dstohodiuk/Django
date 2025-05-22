@@ -1,8 +1,8 @@
-<h1>Головна сторінка</h1>
-<ul>
-    <li><a href="{% url 'view1' %}">Список відеокарт</a></li>
-    <li><a href="{% url 'view2' %}">Інформація про відеокарту</a></li>
-    <li><a href="{% url 'view3' %}">Бренди відеокарт</a></li>
-    <li><a href="{% url 'view4' %}">Корзина</a></li>
-    <li><a href="{% url 'view5' %}">Оформлення замовлення</a></li>
-</ul>
+{% extends 'store/base.html' %}
+
+{% block title %}Головна{% endblock %}
+
+{% block content %}
+    <h2>Ласкаво просимо!</h2>
+    <p>У нашому магазині ви знайдете найкращі відеокарти.</p>
+{% endblock %}

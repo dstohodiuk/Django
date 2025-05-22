@@ -1,0 +1,84 @@
+/* Загальні стилі */
+body {
+    background-color: #f4f6f9;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    color: #212529;
+}
+
+/* Заголовки */
+h1, h2, h3 {
+    color: #0d6efd;
+    margin-bottom: 20px;
+}
+
+/* Список посилань */
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+ul li {
+    margin-bottom: 10px;
+}
+
+ul li a {
+    text-decoration: none;
+    color: #0d6efd;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+ul li a:hover {
+    color: #084298;
+}
+
+/* Хедер */
+header {
+    background-color: #0d6efd;
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Основний блок */
+main {
+    padding: 30px 15px;
+}
+
+/* Футер */
+footer {
+    background-color: #e9ecef;
+    text-align: center;
+    padding: 15px 0;
+    margin-top: 50px;
+    font-size: 0.9em;
+    color: #6c757d;
+}
+
+/* Кнопки */
+.btn-custom {
+    background-color: #0d6efd;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-custom:hover {
+    background-color: #0b5ed7;
+}
+
+/* Картки товарів */
+.card {
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease;
+}
+
+.card:hover {
+    transform: scale(1.02);
+}
