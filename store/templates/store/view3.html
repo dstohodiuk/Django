@@ -6,6 +6,16 @@
     <title>Сторінка 3</title>
 </head>
 <body>
+    <h2>Список брендів</h2>
+    <ul class="list-group">
+    {% for brand in brands %}
+        <li class="list-group-item">
+            <a href="{% url 'brand_detail' brand.id %}">{{ brand.name }}</a>
+        </li>
+    {% empty %}
+        <li class="list-group-item">Немає брендів.</li>
+    {% endfor %}
+    </ul>
     <a href="{% url 'index' %}"> Повернутись на головну</a>
 </body>
 </html>

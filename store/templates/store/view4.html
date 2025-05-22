@@ -1,12 +1,25 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Сторінка 4</title>
-</head>
-<body>
-    <a href="{% url 'index' %}">Повернутись на головну</a>
+{% extends 'store/base.html' %}
 
-</body>
-</html>
+{% block title %}Кошик{% endblock %}
+
+{% block content %}
+<h2>Ваш кошик</h2>
+
+{% if cart_items %}
+    <ul class="list-group mb-3">
+        {% for item in cart_items %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                    {{ item.gpu.model }} ({{ item.quantity }} шт.)
+                </div>
+                <span>{{ item.total_price }} грн</span>
+            </li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'view5' %}" class="btn btn-success">Оформити замовлення</a>
+{% else %}
+    <p>Ваш кошик порожній.</p>
+{% endif %}
+
+<a href="{% url 'index' %}" class="btn btn-link mt-3">Повернутись на головну</a>
+{% endblock %}

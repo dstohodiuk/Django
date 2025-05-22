@@ -12,6 +12,11 @@
         <li><a href="{% url 'view3' %}">Бренди відеокарт</a></li>
         <li><a href="{% url 'view4' %}">Корзина</a></li>
         <li><a href="{% url 'view5' %}">Оформлення замовлення</a></li>
+        {% endfor %}
+        <li>
+            <a href="{% url 'brand_detail' brand.id %}">{{ brand.name }}</a>
+        </li>
+        {% endfor %}
     </ul>
 {% endblock %}
 
