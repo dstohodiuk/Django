@@ -16,6 +16,8 @@ urlpatterns = [
     path('brand/<int:brand_id>/', views.brand_detail, name='brand_detail'),
     path('add-to-cart/<int:gpu_id>/', views.add_to_cart, name='add_to_cart'),
     path('gpus/', views.gpu_list, name='gpu_list'),
+    path('checkout/', views.checkout, name='checkout'),
+    path('order-success/', views.order_success, name='order_success'),
 
 
 ]

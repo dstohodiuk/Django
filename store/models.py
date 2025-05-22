@@ -41,3 +41,16 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Order(models.Model):
+    customer_name = models.CharField(max_length=100)
+    customer_email = models.EmailField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+
+class OrderItem(models.Model):
+    order = models.ForeignKey(
+        Order, on_delete=models.CASCADE, related_name='items')
+    gpu = models.ForeignKey(GPU, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField()

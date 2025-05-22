@@ -1,6 +1,7 @@
 from .models import GPU  # додай на початку
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Product, GPUBrand, GPU
+from .models import Product, GPUBrand, GPU, OrderItem
+from .forms import OrderForm
 
 
 def index(request):
@@ -96,3 +97,40 @@ def gpu_list(request):
         'gpus': gpus,
         'brands': brands
     })
+
+
+def checkout(request):
+    cart = request.session.get('cart', {})
+    gpus = GPU.objects.filter(id__in=cart.keys())
+
+    if request.method == 'POST':
+        form = OrderForm(request.POST)
+        if form.is_valid():
+            order = form.save()
+            for gpu in gpus:
+                OrderItem.objects.create(
+                    order=order,
+                    gpu=gpu,
+                    quantity=cart[str(gpu.id)]
+                )
+            request.session['cart'] = {}  # очищення кошика
+            return redirect('order_success')
+    else:
+        form = OrderForm()
+
+    cart_items = []
+    for gpu in gpus:
+        cart_items.append({
+            'gpu': gpu,
+            'quantity': cart[str(gpu.id)],
+            'total_price': gpu.price * cart[str(gpu.id)],
+        })
+
+    return render(request, 'store/checkout.html', {
+        'form': form,
+        'cart_items': cart_items
+    })
+
+
+def order_success(request):
+    return render(request, 'store/order_success.html')
