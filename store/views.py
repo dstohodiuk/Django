@@ -33,8 +33,6 @@ def product_detail(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
     return render(request, 'store/product_detail.html', {'product': product})
 
-# Деталі категорії
-
 
 def category_detail(request, category_id):
     category = get_object_or_404(GPUBrand, pk=category_id)
@@ -62,8 +60,9 @@ def add_to_cart(request, gpu_id):
         cart = request.session.get('cart', {})
         cart[str(gpu_id)] = cart.get(str(gpu_id), 0) + 1
         request.session['cart'] = cart
-        # або redirect(request.META.get('HTTP_REFERER'))
-        return redirect('view4')
+
+        redirect_to = request.POST.get('redirect_to', 'view4')
+        return redirect(redirect_to)
     else:
         return redirect('index')
 

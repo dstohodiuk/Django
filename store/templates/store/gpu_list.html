@@ -1,39 +1,35 @@
 {% extends 'store/base.html' %}
 
-{% block title %}Усі відеокарти{% endblock %}
-
 {% block content %}
-<h2>Усі відеокарти</h2>
-<ul class="list-group">
-    {% for gpu in gpus %}
-        <li class="list-group-item d-flex justify-content-between align-items-center">
-            <div>
-                <a href="{% url 'gpu_detail' gpu.id %}">
-                    {{ gpu.model }} ({{ gpu.memory_gb }} GB) — {{ gpu.price }} грн
-                </a>
-                {% if gpu.is_available %}
-                    <span class="badge bg-success ms-2">В наявності</span>
-                {% else %}
-                    <span class="badge bg-secondary ms-2">Немає</span>
-                {% endif %}
+<div class="container mt-4">
+    <h2 class="text-center mb-4">Усі відеокарти</h2>
+    <div class="row">
+        {% for gpu in gpus %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <img src="{{ gpu.image.url }}" class="card-img-top" alt="{{ gpu.name }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ gpu.name }}</h5>
+                    <p class="card-text"><strong>Пам’ять:</strong> {{ gpu.memory }} GB</p>
+                    <p class="card-text"><strong>Ціна:</strong> {{ gpu.price }} грн</p>
+                    <p class="card-text">
+                        <strong>Статус:</strong>
+                        {% if gpu.is_available %}
+                            <span class="badge bg-success">В наявності</span>
+                        {% else %}
+                            <span class="badge bg-danger">Немає в наявності</span>
+                        {% endif %}
+                    </p>
+                    <form method="post" action="{% url 'add_to_cart' gpu.id %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="redirect_to" value="checkout">
+                        <button type="submit" class="btn btn-success">Купити</button>
+                    </form>
+                    
+                </div>
             </div>
-            {% if gpu.is_available %}
-                <form action="{% url 'add_to_cart' gpu.id %}" method="post">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-sm btn-primary">Купити</button>
-                </form>
-            {% endif %}
-        </li>
-    {% empty %}
-        <li class="list-group-item">Відеокарт поки немає.</li>
-    {% endfor %}
-</ul>
-<ul>
-    {% for brand in brands %}
-        <li>
-            <a href="{% url 'brand_detail' brand.id %}">{{ brand.name }}</a>
-        </li>
-    {% endfor %}
-</ul>
-
+        </div>
+        {% endfor %}
+    </div>
+</div>
 {% endblock %}

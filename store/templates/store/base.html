@@ -15,15 +15,28 @@
         <nav>
             <a href="{% url 'index' %}" class="text-white me-3">Головна</a>
             <a href="{% url 'gpu_list' %}" class="text-white me-3">Товари</a>
-            <a href="{% url 'checkout' %}" class="text-white">Оформити замовлення</a>
-            <a href="{% url 'order_success' %}" class="text-white">Купити</a>
-
+            <a href="{% url 'checkout' %}" class="text-white me-3">Оформити замовлення</a>
+            <a href="{% url 'order_success' %}" class="text-white"></a>
         </nav>
     </div>
 </header>
 
 <main class="container mt-4">
-    {% block content %}{% endblock %}
+
+    {% block content %}
+    <h2>Ваше замовлення:</h2>
+    {% for item in order_items %}
+      <p>— {{ item.quantity }} шт. — {{ item.price }} грн</p>
+      <form method="post" action="{% url 'remove_item' %}">
+        {% csrf_token %}
+        <input type="hidden" name="item_id" value="{{ item.id }}">
+        <button type="submit" class="btn btn-danger btn-sm">Видалити товар</button>
+      </form>
+    {% empty %}
+      <p>Ваш кошик порожній.</p>
+    {% endfor %}
+    {% endblock %}
+
 </main>
 
 <footer class="bg-light text-center py-3 mt-5">

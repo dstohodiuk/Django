@@ -27,6 +27,7 @@ class GPU(models.Model):
         max_length=10, choices=MEMORY_CHOICES, default='GDDR6')
     is_available = models.BooleanField(default=True)
     price = models.DecimalField(max_digits=8, decimal_places=2)
+    image = models.ImageField(upload_to='gpu_images/', null=True, blank=True)
 
     def __str__(self):
         return f"{self.brand.name} {self.model}"
@@ -47,6 +48,9 @@ class Order(models.Model):
     customer_name = models.CharField(max_length=100)
     customer_email = models.EmailField()
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Замовлення {self.customer_name}"
 
 
 class OrderItem(models.Model):
