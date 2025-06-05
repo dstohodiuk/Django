@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import GPUBrand, GPU
+from .models import GPUBrand, GPU, Order, OrderItem
 
 
 class GPUBrandAdmin(admin.ModelAdmin):
@@ -17,3 +17,5 @@ class GPUAdmin(admin.ModelAdmin):
 
 admin.site.register(GPUBrand, GPUBrandAdmin)
 admin.site.register(GPU, GPUAdmin)
+admin.site.register(Order)
+admin.site.register(OrderItem)

@@ -1,7 +1,8 @@
 from .models import GPU  # додай на початку
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Product, GPUBrand, GPU, OrderItem
-from .forms import OrderForm
+from .forms import OrderForm, Order
+from django.contrib import messages
 
 
 def index(request):
@@ -99,35 +100,43 @@ def gpu_list(request):
 
 
 def checkout(request):
-    cart = request.session.get('cart', {})
-    gpus = GPU.objects.filter(id__in=cart.keys())
+    cart = request.session.get('cart', {})  # Кошик як {gpu_id: кількість}
+
+    if not cart:
+        messages.error(request, "Ваш кошик порожній.")
+        return redirect('cart_view')  # Заміни на свою сторінку кошика
 
     if request.method == 'POST':
         form = OrderForm(request.POST)
         if form.is_valid():
-            order = form.save()
-            for gpu in gpus:
+            order = Order.objects.create(
+                customer_name=form.cleaned_data['customer_name'],
+                customer_email=form.cleaned_data['customer_email']
+            )
+            for gpu_id, quantity in cart.items():
+                gpu = GPU.objects.get(id=gpu_id)
                 OrderItem.objects.create(
                     order=order,
                     gpu=gpu,
-                    quantity=cart[str(gpu.id)]
+                    quantity=quantity
                 )
-            request.session['cart'] = {}  # очищення кошика
-            return redirect('order_success')
+            request.session['cart'] = {}  # Очистити кошик
+            messages.success(request, "Дякуємо за замовлення!")
+            return redirect('order_success')  # Створи таку сторінку
     else:
         form = OrderForm()
 
     cart_items = []
-    for gpu in gpus:
-        cart_items.append({
-            'gpu': gpu,
-            'quantity': cart[str(gpu.id)],
-            'total_price': gpu.price * cart[str(gpu.id)],
-        })
+    total_price = 0
+    for gpu_id, quantity in cart.items():
+        gpu = GPU.objects.get(id=gpu_id)
+        cart_items.append({'gpu': gpu, 'quantity': quantity})
+        total_price += gpu.price * quantity
 
     return render(request, 'store/checkout.html', {
         'form': form,
-        'cart_items': cart_items
+        'cart_items': cart_items,
+        'total_price': total_price,
     })
 
 

@@ -1,21 +1,112 @@
-{% extends 'store/base.html' %}
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>Оформлення замовлення</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 30px;
+    }
 
-{% block title %}Оформлення замовлення{% endblock %}
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    }
 
-{% block content %}
-<h2>Оформлення замовлення</h2>
+    h2 {
+      margin-bottom: 20px;
+      color: #333;
+      text-align: center;
+    }
 
-<form method="post">
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      background: #f9f9f9;
+      padding: 10px 15px;
+      margin-bottom: 10px;
+      border-left: 4px solid #007bff;
+    }
+
+    p {
+      font-size: 18px;
+      font-weight: bold;
+      text-align: right;
+    }
+
+    form {
+      margin-top: 30px;
+    }
+
+    input, button {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    .messages {
+      margin-bottom: 20px;
+      padding: 10px;
+      background-color: #d4edda;
+      border-left: 5px solid #28a745;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>Оформлення замовлення</h2>
+
+  {% if messages %}
+    <div class="messages">
+      {% for message in messages %}
+        <p>{{ message }}</p>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <ul>
+    {% for item in cart_items %}
+      <li>
+        <strong>{{ item.gpu }}</strong> — Кількість: {{ item.quantity }} — Ціна: {{ item.gpu.price }} грн
+      </li>
+    {% endfor %}
+  </ul>
+
+  <p>Всього до сплати: {{ total_price }} грн</p>
+
+  <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
+    <button type="submit">Оформити замовлення</button>
+  </form>
+</div>
 
-    <h4>Ваше замовлення:</h4>
-    <ul>
-        {% for item in cart_items %}
-            <li>{{ item.gpu.name }} — {{ item.quantity }} шт. — {{ item.total_price }} грн</li>
-        {% endfor %}
-    </ul>
-
-    <button type="submit" class="btn btn-success">Підтвердити замовлення</button>
-</form>
-{% endblock %}
+</body>
+</html>
