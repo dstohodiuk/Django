@@ -1,9 +1,22 @@
 {% extends 'store/base.html' %}
 
-{% block title %}{{ gpu.brand.name }} {{ gpu.model }}{% endblock %}
+{% block title %}
+    {% if gpu.brand %}
+        {{ gpu.brand.name }} {{ gpu.model }}
+    {% else %}
+        {{ gpu.model }}
+    {% endif %}
+{% endblock %}
 
 {% block content %}
-<h2>{{ gpu.brand.name }} {{ gpu.model }}</h2>
+<h2>
+    {% if gpu.brand %}
+        {{ gpu.brand.name }} {{ gpu.model }}
+    {% else %}
+        {{ gpu.model }}
+    {% endif %}
+</h2>
+
 <ul class="list-group">
     <li class="list-group-item"><strong>Памʼять:</strong> {{ gpu.memory_gb }} GB ({{ gpu.memory_type }})</li>
     <li class="list-group-item"><strong>Core Clock:</strong> {{ gpu.core_clock_mhz }} MHz</li>
@@ -11,16 +24,18 @@
     <li class="list-group-item"><strong>Наявність:</strong> {{ gpu.is_available|yesno:"Так,Ні" }}</li>
     <li class="list-group-item"><strong>Ціна:</strong> {{ gpu.price }} грн</li>
     <li class="list-group-item"><strong>Бренд:</strong> 
-        <a href="{% url 'brand_detail' gpu.brand.id %}">{{ gpu.brand.name }}</a>
+        {% if gpu.brand %}
+            <a href="{% url 'brand_detail' gpu.brand.id %}">{{ gpu.brand.name }}</a>
+        {% else %}
+            <span>Без бренду</span>
+        {% endif %}
     </li>
 </ul>
 
-<!-- Кнопка Купити -->
 {% if gpu.is_available %}
 <form action="{% url 'add_to_cart' gpu.id %}" method="post" class="mt-4">
     {% csrf_token %}
     <button type="submit" class="btn btn-success btn-lg">Купити</button>
 </form>
 {% endif %}
-
 {% endblock %}

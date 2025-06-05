@@ -7,6 +7,30 @@
 </head>
 <body>
     <a href="{% url 'index' %}">Повернутись на головну</a>
-
+    <div class="col-md-4 mb-4">
+        <a href="{% url 'gpu_detail' gpu.id %}" class="text-decoration-none text-dark">
+            <div class="card h-100">
+                <img src="{{ gpu.image.url }}" class="card-img-top" alt="{{ gpu.name }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ gpu.model }}</h5>
+                    <p class="card-text"><strong>Пам’ять:</strong> {{ gpu.memory_gb }} GB</p>
+                    <p class="card-text"><strong>Ціна:</strong> {{ gpu.price }} грн</p>
+                    <p class="card-text">
+                        <strong>Статус:</strong>
+                        {% if gpu.is_available %}
+                            <span class="badge bg-success">В наявності</span>
+                        {% else %}
+                            <span class="badge bg-danger">Немає в наявності</span>
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+        </a>
+        <form method="post" action="{% url 'add_to_cart' gpu.id %}" class="mt-2">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-success">Купити</button>
+        </form>
+    </div>
+    
 </body>
 </html>

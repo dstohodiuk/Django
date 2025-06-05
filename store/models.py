@@ -18,7 +18,8 @@ class GPU(models.Model):
         ('GDDR6X', 'GDDR6X'),
     ]
 
-    brand = models.ForeignKey(GPUBrand, on_delete=models.CASCADE)
+    brand = models.ForeignKey(
+        GPUBrand, on_delete=models.SET_NULL, null=True, blank=True)
     model = models.CharField(max_length=100)
     memory_gb = models.PositiveIntegerField(default=8)
     core_clock_mhz = models.PositiveIntegerField()

@@ -41,7 +41,7 @@ def category_detail(request, category_id):
 
 
 def gpu_detail(request, gpu_id):
-    gpu = get_object_or_404(Product, id=gpu_id)  # або GPU
+    gpu = get_object_or_404(GPU, id=gpu_id)
     return render(request, 'store/gpu_detail.html', {'gpu': gpu})
 
 

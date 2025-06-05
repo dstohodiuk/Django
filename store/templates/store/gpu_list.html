@@ -1,33 +1,48 @@
 {% extends 'store/base.html' %}
+{% load humanize %}
+
+{% block title %}Список відеокарт{% endblock %}
 
 {% block content %}
 <div class="container mt-4">
-    <h2 class="text-center mb-4">Усі відеокарти</h2>
+    <h2>Відеокарти</h2>
+
     <div class="row">
         {% for gpu in gpus %}
         <div class="col-md-4 mb-4">
             <div class="card h-100">
-                <img src="{{ gpu.image.url }}" class="card-img-top" alt="{{ gpu.name }}">
-                <div class="card-body">
-                    <h5 class="card-title">{{ gpu.name }}</h5>
-                    <p class="card-text"><strong>Пам’ять:</strong> {{ gpu.memory }} GB</p>
-                    <p class="card-text"><strong>Ціна:</strong> {{ gpu.price }} грн</p>
+                {% if gpu.image %}
+                <img src="{{ gpu.image.url }}" class="card-img-top" alt="{{ gpu.model }}" style="max-height: 200px; object-fit: contain;">
+                {% endif %}
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">
+                        <a href="{% url 'gpu_detail' gpu.id %}">
+                            {% if gpu.brand %}
+                                {{ gpu.brand.name }}
+                            {% else %}
+                                Без бренду
+                            {% endif %}
+                            {{ gpu.model }}
+                        </a>
+                    </h5>
                     <p class="card-text">
-                        <strong>Статус:</strong>
-                        {% if gpu.is_available %}
-                            <span class="badge bg-success">В наявності</span>
+                        <strong>Памʼять:</strong> {{ gpu.memory_gb }} GB<br>
+                        <strong>Ціна:</strong> {{ gpu.price|intcomma }} грн<br>
+                        <strong>Наявність:</strong> {{ gpu.is_available|yesno:"Так,Ні" }}<br>
+                        <strong>Бренд:</strong>
+                        {% if gpu.brand %}
+                            <a href="{% url 'brand_detail' gpu.brand.id %}">{{ gpu.brand.name }}</a>
                         {% else %}
-                            <span class="badge bg-danger">Немає в наявності</span>
+                            <span>Без бренду</span>
                         {% endif %}
                     </p>
-                    <form method="post" action="{% url 'add_to_cart' gpu.id %}">
-                        {% csrf_token %}
-                        <input type="hidden" name="redirect_to" value="checkout">
-                        <button type="submit" class="btn btn-success">Купити</button>
-                    </form>
-                    
+                    <a href="{% url 'gpu_detail' gpu.id %}" class="mt-auto btn btn-primary w-100">Детальніше</a>
                 </div>
             </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <p>Наразі відеокарти недоступні.</p>
         </div>
         {% endfor %}
     </div>
